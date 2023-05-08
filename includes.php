@@ -228,8 +228,15 @@ function get_task_data( int $task ): array {
 		$maniphestData = $api->Maniphest( 'info', [
 			'task_id' => $task
 		] )->getResult();
-		$title = $maniphestData['title'];
-		$status = $maniphestData['status'];
+
+		if ( $maniphestData ) {
+			$title = $maniphestData['title'];
+			$status = $maniphestData['status'];
+		} else {
+			// e.g. security-restricted tasks
+			$title = '';
+			$status = 'unknown';
+		}
 
 		// Update cache
 		$stmt = $mysqli->prepare( '
